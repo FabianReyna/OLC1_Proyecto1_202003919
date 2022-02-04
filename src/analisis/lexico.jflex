@@ -1,13 +1,14 @@
 package analisis;
 
 import java_cup.runtime.Symbol;
+import static proyecto1_olc.Proyecto1_OLC.errores;
 
 
 
 %%
 
 %{
-    String cadena= "";
+    String cadena="";
     String letter="";
 %}
 
@@ -22,6 +23,7 @@ import java_cup.runtime.Symbol;
 %state LETRA
 %state ID
 %ignorecase
+//%debug
 
 //simbolos y caracteres especiales
 DOSPUNTOS = ":"
@@ -37,11 +39,11 @@ OR1 = "|"
 KLEENE1 = "*"
 POSITIVE1 = "+"
 OPTIONAL1 = "?"
-CARACTER = "[!#$%&'()\-./:;<>@[\\\]^_`]" 
+CARACTER = [\!\#\$\%\&\'\(\)\-\.\/\:\;\<\>\@\[\\\]\^\_\`]
+COMILLA1 = \\\'
+COMILLA2 = \\\"
 
 //comentarios y espacios en blanco
-COMILLA1 = "\\\'"
-COMILLA2 = "\\\""
 SPACE = [\ \r\t\f\t]
 ENTER = [\ \n]
 
@@ -51,12 +53,12 @@ CONJ1 = "CONJ"
 //expresiones regulares
 ENTERO = [0-9]+
 
-COM1 = "\/\/.*"
-COM2 = "\<\!(\s*|.*?)*\!\>"
+COM1 = \/\/.*
+COM2 = \<\!(\s*|.*?)*\!\>
 
 %%
 
-<YYINITIAL> {CONJ1}      { return new Symbol(sym.CONJ1, yyline, yycolumn,"conjunto");}
+<YYINITIAL> {CONJ1}      { return new Symbol(sym.CONJ1, yyline, yycolumn,yytext());}
 <YYINITIAL> {DOSPUNTOS}      { return new Symbol(sym.DOSPUNTOS, yyline, yycolumn,yytext());}
 <YYINITIAL> {PUNTOCOMA}      { return new Symbol(sym.PUNTOCOMA, yyline, yycolumn,yytext());}
 <YYINITIAL> {GUIONC}      { return new Symbol(sym.GUIONC, yyline, yycolumn,yytext());}
@@ -89,7 +91,7 @@ COM2 = "\<\!(\s*|.*?)*\!\>"
 
 <CADENA>{
         [\"] {String tmp=cadena+"\""; cadena=""; yybegin(YYINITIAL); return new Symbol(sym.CADENA, yychar,yyline,tmp);}
-        [\n] {String tmp=cadena; cadena="";
+        [\n] {cadena="";
                 errores.NewError("Lexico", "Se esperaba cierre de cadena",yyline+1,yycolumn+1);
                 System.out.println("Se esperaba cierre de cadena");
                 yybegin(YYINITIAL);
@@ -99,26 +101,23 @@ COM2 = "\<\!(\s*|.*?)*\!\>"
 
 <LETRA>{
         [_0-9A-Za-zñÑ] {
-                letter=+yytext();
-                yybegin(LETRA); 
-                String tmp=letter; letter="";
-                yybegin(ID);
-                if(tmp.length()==1){
-                    
+                letter+=yytext();
+                yybegin(ID); 
                 }
-                return new Symbol(sym.ID, yychar,yyline,tmp);}
                 
         [^_0-9A-Za-zñÑ] {String tmp=letter;
                 letter="";
                 yybegin(YYINITIAL);
-                return new Symbol(sym.LETRA, yychar,yyline,tmp)}
+                yypushback(1);
+                return new Symbol(sym.LETRA, yychar,yyline,tmp);}
 }
 
 <ID>{
-        [_0-9A-Za-zñÑ] { letter=+yytext();}
+        [_0-9A-Za-zñÑ] { letter+=yytext();}
         [^_0-9A-Za-zñÑ] {String tmp=letter;
                 letter="";
                 yybegin(YYINITIAL);
-                return new Symbol(sym.LETRA, yychar,yyline,tmp)}
+                yypushback(1);
+                return new Symbol(sym.ID, yychar,yyline,tmp);}
 }
 

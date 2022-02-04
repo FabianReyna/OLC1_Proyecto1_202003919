@@ -19,8 +19,8 @@ public class Generar {
             String ruta = "src/analisis/"; 
             String opcFlex[] = { ruta + "lexico.jflex", "-d", ruta };
             JFlex.Main.generate(opcFlex);
-            /*String opcCUP[] = { "-destdir", ruta, "-parser", "parser", ruta + "sintactico.cup" };
-            java_cup.Main.main(opcCUP);*/
+            String opcCUP[] = { "-destdir", ruta, "-parser", "parser", ruta + "sintactico.cup" };
+            java_cup.Main.main(opcCUP);
         } catch (Exception e) {
             e.printStackTrace();
         }

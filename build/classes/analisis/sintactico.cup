@@ -1,17 +1,81 @@
 package analisis;
-
 import java_cup.runtime.Symbol;
+//import static proyecto1_olc.Proyecto1_OLC.errores;
 
 //PARSER 
 parser code
 {:
     
     public void syntax_error(Symbol s){
-        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+        errores.NewError("Sintactico", ""+s.value,s.left+1,s.right+1);
+        //System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
     }
 
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        errores.NewError("Sintactico", ""+s.value,s.left+1,s.right+1); 
+        //System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
     }
 
 :}
+action code
+{:
+//codigo user
+:}
+
+terminal DOSPUNTOS, GUIONC, PUNTOCOMA, LLAVE1, LLAVE2, FLECHA, SEPARADOR, COMA;
+terminal CONCAT1, OR1, KLEENE1, POSITIVE1, OPTIONAL1, CARACTER;
+terminal COMILLA1, COMILLA2, CONJ1, ENTERO;
+terminal CADENA, LETRA, ID;
+
+
+nonterminal INICIO, INSTRUCCIONES, INSTRUCCION, INSTRUCCION2, END, SEPARADORES1;
+nonterminal CONJUNTOS, IDENTIFICATOR,IDENTIFICATOR2, REG_EXP, LISTA_EXP; 
+nonterminal VAR_CONJ, CHAAR, NUM_LET, MAS_CAR, MAS_EXP_POL, EXP_POL, EXP_CONJ;
+ 
+
+start with INICIO;
+
+INICIO::=INSTRUCCIONES;
+
+INSTRUCCIONES::= LLAVE1 INSTRUCCION INSTRUCCION2;
+
+INSTRUCCION2::= INSTRUCCION INSTRUCCION2 
+            | LLAVE2;
+
+INSTRUCCION::= CONJUNTOS
+            | IDENTIFICATOR
+            | SEPARADORES1;
+SEPARADORES1::=SEPARADOR;
+CONJUNTOS::= CONJ1 DOSPUNTOS ID FLECHA VAR_CONJ;
+VAR_CONJ::= CHAAR GUIONC CHAAR PUNTOCOMA
+            | NUM_LET MAS_CAR;
+CHAAR::= CARACTER
+        | ENTERO
+        | LETRA
+        | PUNTOCOMA
+        | DOSPUNTOS;
+NUM_LET::= LETRA
+           | ENTERO;
+MAS_CAR::= COMA NUM_LET MAS_CAR
+           | PUNTOCOMA;
+           
+
+IDENTIFICATOR::= ID IDENTIFICATOR2;
+IDENTIFICATOR2::= REG_EXP
+                 | LISTA_EXP;
+
+REG_EXP::=FLECHA MAS_EXP_POL;
+MAS_EXP_POL::= EXP_POL MAS_EXP_POL
+               | PUNTOCOMA;
+
+EXP_POL::= CONCAT1
+              | CADENA
+              | KLEENE1
+              | OR1
+              | POSITIVE1
+              | OPTIONAL1
+              | EXP_CONJ;
+EXP_CONJ::= LLAVE1 ID LLAVE2;
+
+LISTA_EXP::= DOSPUNTOS CADENA PUNTOCOMA;
+             
