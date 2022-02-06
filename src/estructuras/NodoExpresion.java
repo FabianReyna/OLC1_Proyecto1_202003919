@@ -9,19 +9,17 @@ package estructuras;
  *
  * @author fabian
  */
-public class NodoError {
-    public String tipo;
-    public String desc;
-    public int linea;
-    public int col;
-    public NodoError sig=null;
-    
+public class NodoExpresion {
 
-    public NodoError(String tipo, String desc, int linea, int col) {
+    public String lexema;
+    public String tipo;
+    public String valor;
+    public NodoExpresion sig = null;
+
+    public NodoExpresion(String lexema, String tipo, String valor) {
+        this.lexema = lexema;
         this.tipo = tipo;
-        this.desc = desc;
-        this.linea = linea;
-        this.col = col;
+        this.valor = valor;
     }
     
     
