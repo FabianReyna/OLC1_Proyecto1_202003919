@@ -3,24 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package estructuras;
+package Metodo_Arbol;
 
 /**
  *
  * @author fabian
  */
-public class ListaExpresiones {
+public class ListaPila {
 
-    public NodoExpresion inicio;
-    public NodoExpresion fin;
+    public NodoPila inicio;
+    public NodoPila fin;
+    public int size;
 
-    public ListaExpresiones() {
+    public ListaPila() {
         this.inicio = null;
         this.fin = null;
+        this.size = 0;
     }
 
-    public void AgregarExpresion(String lex, String tip, String val) {
-        NodoExpresion nuevo = new NodoExpresion(lex, tip, val);
+    public void Apilar(NodoArbol nb) {
+        NodoPila nuevo = new NodoPila(nb);
         if (this.inicio == null) {
             this.inicio = nuevo;
         }
@@ -28,36 +30,32 @@ public class ListaExpresiones {
             this.fin.sig = nuevo;
         }
         this.fin = nuevo;
+        this.size += 1;
     }
 
-    public NodoExpresion Eliminar() {
-        NodoExpresion eliminando;
+    public void Eliminar() {
         if (this.inicio == this.fin) {
-            eliminando = this.inicio;
             this.inicio = this.fin = null;
-            return eliminando;
+
         } else if (this.inicio.sig == this.fin) {
-            eliminando = this.inicio.sig;
             this.inicio.sig = null;
             this.fin = this.inicio;
-            return eliminando;
+
         } else {
-            NodoExpresion aux, aux2;
+            NodoPila aux, aux2;
             aux = this.inicio.sig;
             aux2 = this.inicio;
             while (aux != null) {
                 if (aux == this.fin) {
-                    eliminando = aux2.sig;
                     aux2.sig = null;
                     this.fin = aux2;
-                    return eliminando;
+
                 }
                 aux2 = aux2.sig;
                 aux = aux.sig;
 
             }
         }
-        return null;
+        this.size -= 1;
     }
-
 }
