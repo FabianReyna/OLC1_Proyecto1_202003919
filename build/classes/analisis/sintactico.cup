@@ -19,19 +19,26 @@ parser code
 :}
 action code
 {:
-//codigo user
+    NodoConjunto nc;
+    String ch1="";
+    NodoExpresion nodE;
+    String identi="";
+    boolean esCon=false;
+    ListaExpresiones listEx;
+
 :}
 
 terminal DOSPUNTOS, GUIONC, PUNTOCOMA, LLAVE1, LLAVE2, FLECHA, SEPARADOR, COMA;
-terminal CONCAT1, OR1, KLEENE1, POSITIVE1, OPTIONAL1, CARACTER;
-terminal COMILLA1, COMILLA2, CONJ1, ENTERO;
-terminal CADENA, LETRA, ID;
+terminal CONJ1;
+terminal String CADENA;
+terminal String ID, CARACTER, ENTERO, LETRA, COMILLA1, COMILLA2;
+terminal String CONCAT1, OR1, KLEENE1, POSITIVE1, OPTIONAL1;
 
 
 nonterminal INICIO, INSTRUCCIONES, INSTRUCCION, INSTRUCCION2, END, SEPARADORES1;
 nonterminal CONJUNTOS, IDENTIFICATOR,IDENTIFICATOR2, REG_EXP, LISTA_EXP, DEF_EXP, DEF_EXP_REG; 
-nonterminal VAR_CONJ, CHAAR, VAR_CONJ2, MAS_CAR, MAS_EXP_POL, EXP_POL, EXP_CONJ;
- 
+nonterminal VAR_CONJ, VAR_CONJ2, MAS_CAR, MAS_EXP_POL;
+nonterminal String CHAAR,EXP_POL, EXP_CONJ;
 
 start with INICIO;
 
@@ -48,44 +55,143 @@ INSTRUCCION::= CONJUNTOS
             | IDENTIFICATOR
             | SEPARADORES1;
 SEPARADORES1::=SEPARADOR;
-CONJUNTOS::= CONJ1 DOSPUNTOS ID FLECHA VAR_CONJ;
-VAR_CONJ::=CHAAR VAR_CONJ2;
-VAR_CONJ2::= GUIONC CHAAR PUNTOCOMA
-            | MAS_CAR;
-CHAAR::= CARACTER
-        | ENTERO
-        | LETRA
+CONJUNTOS::= CONJ1 DOSPUNTOS ID:id
+            {:
+            nc=new NodoConjunto(id);
+            :} FLECHA VAR_CONJ;
+            
+VAR_CONJ::=CHAAR:c 
+            {:
+            ch1=c;
+            :}
+            VAR_CONJ2;
+            
+VAR_CONJ2::= GUIONC CHAAR:c PUNTOCOMA
+            {:
+            nc.rango=true;
+            nc.AgregaReglas(ch1);
+            nc.AgregaReglas(c);
+            conjuntos.AgregarConjunto(nc);
+            :}
+            | MAS_CAR
+            {:
+            nc.rango=false;
+            nc.AgregaReglas(ch1);
+            :}
+            ;
+CHAAR::= CARACTER:ca
+        {:
+            RESULT=ca;
+        :}
+        | ENTERO:en
+        {:
+            RESULT=en;
+        :}
+        | LETRA:le
+        {:
+            RESULT=le;
+        :}
         | PUNTOCOMA
-        | DOSPUNTOS;
+        {:
+            RESULT=";";
+        :}
+        | DOSPUNTOS
+        {:
+            RESULT=":";
+        :};
 
-MAS_CAR::= COMA CHAAR MAS_CAR
-           | PUNTOCOMA;
+MAS_CAR::= COMA CHAAR:c MAS_CAR
+            {:
+            nc.AgregaReglas(c);
+            :}
+           | PUNTOCOMA
+            {:
+            conjuntos.AgregarConjunto(nc);
+            :}
+;
            
 
-IDENTIFICATOR::= ID IDENTIFICATOR2;
+IDENTIFICATOR::= ID:id 
+                {:
+                identi=id;
+                :}
+                IDENTIFICATOR2;
+                
 IDENTIFICATOR2::= REG_EXP
                  | LISTA_EXP;
 
-REG_EXP::=FLECHA MAS_EXP_POL;
-MAS_EXP_POL::= EXP_POL MAS_EXP_POL
-               | PUNTOCOMA;
+REG_EXP::=FLECHA
+          {:
+          listEx=new ListaExpresiones();
+          :}
+          MAS_EXP_POL;
+MAS_EXP_POL::= EXP_POL:epp 
+                {:
+                listEx.AgregarExpresion(epp,esCon);
+                :}
+                MAS_EXP_POL
+                
+               | PUNTOCOMA
+                {:
+                regularExpression.AgregarExp(identi,listEx);
+                :}
+                ;
 
-EXP_POL::= CONCAT1
-              | CADENA
-              | KLEENE1
-              | OR1
-              | POSITIVE1
-              | OPTIONAL1
-              | COMILLA1
-              | COMILLA2
-              | EXP_CONJ;
-EXP_CONJ::= LLAVE1 ID LLAVE2;
+EXP_POL::= CONCAT1:co
+            {:
+            RESULT=co;
+            esCon=false;
+            :}
+           | CADENA:ca
+           {:
+            RESULT=ca;
+            esCon=false;
+            :}
+           | KLEENE1:kle
+           {:
+            RESULT=kle;
+            esCon=false;
+            :}
+           | OR1:orr
+           {:
+            RESULT=orr;
+            esCon=false;
+            :}
+           | POSITIVE1:posi
+           {:
+            RESULT=posi;
+            esCon=false;
+            :}
+           | OPTIONAL1:opti
+           {:
+            RESULT=opti;
+            esCon=false;
+            :}
+           | COMILLA1:comi1
+           {:
+            RESULT=comi1;
+            esCon=false;
+            :}
+           | COMILLA2:comi2
+           {:
+            RESULT=comi2;
+            esCon=false;
+            :}
+           | EXP_CONJ:exco
+            {:
+            RESULT=exco;
+            esCon=true;
+            :}
+            ;
+EXP_CONJ::= LLAVE1 ID:id LLAVE2
+            {:
+            RESULT=id;
+            :}
+;
 
-LISTA_EXP::= DOSPUNTOS DEF_EXP_REG;
-
-DEF_EXP_REG::= DEF_EXP DEF_EXP_REG
-               | PUNTOCOMA;
-DEF_EXP::= CADENA
-           | COMILLA1
-           | COMILLA2;
+LISTA_EXP::= DOSPUNTOS DEF_EXP;
+DEF_EXP::= CADENA:ca PUNTOCOMA
+            {:
+            regularExpression.ActualizaValor(identi,ca);
+            :};
              

@@ -13,14 +13,17 @@ public class NodoConjunto {
 
     public String nombre;
     public boolean rango;
-    public ListaCaracteres regla;
+    public ListaCaracteres regla=new ListaCaracteres();
     NodoConjunto sig = null;
 
-    public NodoConjunto(String nombre, boolean rango, ListaCaracteres regla) {
+    public NodoConjunto(String nombre) {
         this.nombre = nombre;
+    } 
+
+    public void setRango(boolean rango) {
         this.rango = rango;
-        this.regla = new ListaCaracteres();
     }
+    
 
     public void AgregaReglas(String caracter) {
         this.regla.AgregarCaracter(caracter);

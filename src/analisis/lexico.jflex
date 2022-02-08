@@ -96,7 +96,7 @@ COM2 = \<\!(\s*|.*?)*\!\>
                 System.out.println("Se esperaba cierre de cadena");
                 yybegin(YYINITIAL);
              }
-        [^\"] { cadena+=yytext();}
+        (\\\")|(\\\")|(\\n)|[^\"] { cadena+=yytext();}
 }
 
 <LETRA>{

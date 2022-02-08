@@ -13,14 +13,33 @@ public class NodoExpresion {
 
     public String lexema;
     public String tipo;
-    public String valor;
     public NodoExpresion sig = null;
+    public boolean conj;
 
-    public NodoExpresion(String lexema, String tipo, String valor) {
+    public NodoExpresion(String lexema, boolean b) {
         this.lexema = lexema;
-        this.tipo = tipo;
-        this.valor = valor;
+        this.conj = b;
+        switch (lexema) {
+            case "*":
+                this.tipo = "KLEENE";
+                break;
+            case "+":
+                this.tipo = "POSITIVE1";
+                break;
+            case ".":
+                this.tipo = "CONCAT1";
+                break;
+            case "?":
+                this.tipo = "OPTIONAL1";
+                break;
+            case "|":
+                this.tipo = "OR1";
+                break;
+            default:
+                this.tipo = "TERMINAL";
+                break;
+        }
     }
-    
-    
+
+
 }

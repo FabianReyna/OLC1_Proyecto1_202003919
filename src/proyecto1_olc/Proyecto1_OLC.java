@@ -19,26 +19,27 @@ import java.io.StringReader;
 public class Proyecto1_OLC {
 
     public static ListaErrores errores;
-    public static ListaExpresiones regularExpression;
+    public static ListaExpRegular regularExpression;
     public static ListaConjuntos conjuntos;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+/*
         Inicio in = new Inicio();
         in.setVisible(true);
         String cadena = "\\\\";
         System.out.println(cadena);
 
         errores = new ListaErrores();
-        regularExpression = new ListaExpresiones();
-        conjuntos = new ListaConjuntos();
-        /*
+        regularExpression = new ListaExpRegular();
+        conjuntos = new ListaConjuntos();*/
+        
         Arbol a = new Arbol();
-        Arbol b = new Arbol();
-         */
+        Arbol a2 = new Arbol();
+        
+         
  /*
         a.AgregarNodo(".", "CONCAT1");
         a.AgregarNodo(".", "CONCAT1");
@@ -49,18 +50,43 @@ public class Proyecto1_OLC {
         a.AgregarNodo("digito", "TERMINAL");
         a.AgregarNodo("#", "FINCADENA");
          */
- /*
+ 
+        a2.AgregarNodo(".", "CONCAT1");
+        a2.AgregarNodo(".", "CONCAT1");
+        a2.AgregarNodo(".", "CONCAT1");
+        a2.AgregarNodo("a", "TERMINAL"); 
+        a2.AgregarNodo("*", "KLEENE");
+        a2.AgregarNodo("|", "OR1");
+        a2.AgregarNodo("a", "TERMINAL");
+        a2.AgregarNodo("b", "TERMINAL");
+        a2.AgregarNodo("b", "TERMINAL");
+        a2.AgregarNodo("#", "FINCADENA");
+        a2.Identifica_Hojas(a2.raiz);
+        a2.Anulables(a2.raiz);
+ 
+ 
         a.AgregarNodo(".", "CONCAT1");
+        a.AgregarNodo("+", "POSITIVE1");
+        a.AgregarNodo("|", "OR1");
+        a.AgregarNodo("|", "OR1");
         a.AgregarNodo(".", "CONCAT1");
-        a.AgregarNodo("l", "TERMINAL"); 
+        a.AgregarNodo("c", "TERMINAL");
+        a.AgregarNodo("|", "OR1");
+        a.AgregarNodo("o", "TERMINAL");
+        a.AgregarNodo("e", "TERMINAL");
         a.AgregarNodo(".", "CONCAT1");
-        a.AgregarNodo("*", "KLEENE");
-        a.AgregarNodo(".", "CONCAT1");
-        a.AgregarNodo("?", "OPTIONAL1");
-        a.AgregarNodo("g", "TERMINAL");
-        a.AgregarNodo("l", "TERMINAL");
         a.AgregarNodo("d", "TERMINAL");
-        a.AgregarNodo("#", "FINCADENA");*/
+        a.AgregarNodo("m", "TERMINAL");
+        a.AgregarNodo(".", "CONCAT1");
+        a.AgregarNodo("a", "TERMINAL");
+        a.AgregarNodo("|", "OR1");
+        a.AgregarNodo("n", "TERMINAL");
+        a.AgregarNodo("L", "TERMINAL");
+        a.AgregarNodo("#", "FINCADENA");
+        a.Identifica_Hojas(a.raiz);
+        a.Anulables(a.raiz);
+        
+        System.out.println("");
 
     }
 

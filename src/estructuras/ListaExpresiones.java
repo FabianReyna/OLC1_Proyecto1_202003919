@@ -19,8 +19,8 @@ public class ListaExpresiones {
         this.fin = null;
     }
 
-    public void AgregarExpresion(String lex, String tip, String val) {
-        NodoExpresion nuevo = new NodoExpresion(lex, tip, val);
+    public void AgregarExpresion(String lex,boolean b) {
+        NodoExpresion nuevo = new NodoExpresion(lex, b);
         if (this.inicio == null) {
             this.inicio = nuevo;
         }

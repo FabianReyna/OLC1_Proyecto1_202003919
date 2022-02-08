@@ -7,7 +7,10 @@ package proyecto1_olc;
 
 import analisis.parser;
 import analisis.scanner;
+import estructuras.ListaConjuntos;
 import estructuras.ListaErrores;
+import estructuras.ListaExpRegular;
+import estructuras.ListaExpresiones;
 import estructuras.NodoError;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +31,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import static proyecto1_olc.Proyecto1_OLC.conjuntos;
 import static proyecto1_olc.Proyecto1_OLC.errores;
+import static proyecto1_olc.Proyecto1_OLC.regularExpression;
 
 /**
  *
@@ -181,12 +186,14 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         jLabel1.setText("Archivo de Entrada");
 
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel2.setText("Salida");
 
         jTextArea2.setColumns(20);
+        jTextArea2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
@@ -240,12 +247,20 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            errores=new ListaErrores();
+            errores = new ListaErrores();
+            regularExpression = new ListaExpRegular();
+           
+            conjuntos = new ListaConjuntos();
             String texto = jTextArea1.getText();
             scanner scan = new scanner(new BufferedReader(new StringReader(texto)));
 
             parser parser = new parser(scan);
             parser.parse();
+            System.out.println("");
+            ListaExpRegular LR=regularExpression;
+            ListaConjuntos c=conjuntos;
+            System.out.println("");
+            
 
             File[] lista = null;
 
