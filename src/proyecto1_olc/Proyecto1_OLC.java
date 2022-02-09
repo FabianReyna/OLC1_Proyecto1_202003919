@@ -26,7 +26,7 @@ public class Proyecto1_OLC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-/*
+
         Inicio in = new Inicio();
         in.setVisible(true);
         String cadena = "\\\\";
@@ -34,10 +34,11 @@ public class Proyecto1_OLC {
 
         errores = new ListaErrores();
         regularExpression = new ListaExpRegular();
-        conjuntos = new ListaConjuntos();*/
+        conjuntos = new ListaConjuntos();
+        /*
         
         Arbol a = new Arbol();
-        Arbol a2 = new Arbol();
+        Arbol a2 = new Arbol();*/
         
          
  /*
@@ -50,7 +51,7 @@ public class Proyecto1_OLC {
         a.AgregarNodo("digito", "TERMINAL");
         a.AgregarNodo("#", "FINCADENA");
          */
- 
+ /*
         a2.AgregarNodo(".", "CONCAT1");
         a2.AgregarNodo(".", "CONCAT1");
         a2.AgregarNodo(".", "CONCAT1");
@@ -63,8 +64,10 @@ public class Proyecto1_OLC {
         a2.AgregarNodo("#", "FINCADENA");
         a2.Identifica_Hojas(a2.raiz);
         a2.Anulables(a2.raiz);
+        a2.Primeros(a2.raiz);
+        a2.Ultimos(a2.raiz);*/
  
- 
+        /*
         a.AgregarNodo(".", "CONCAT1");
         a.AgregarNodo("+", "POSITIVE1");
         a.AgregarNodo("|", "OR1");
@@ -84,7 +87,7 @@ public class Proyecto1_OLC {
         a.AgregarNodo("L", "TERMINAL");
         a.AgregarNodo("#", "FINCADENA");
         a.Identifica_Hojas(a.raiz);
-        a.Anulables(a.raiz);
+        a.Anulables(a.raiz);*/
         
         System.out.println("");
 

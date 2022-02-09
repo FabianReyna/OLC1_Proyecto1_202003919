@@ -152,8 +152,8 @@ public class Arbol {
 
     public void Primeros(NodoArbol root) {
         if (root != null) {
-            this.Anulables(root.izq);
-            this.Anulables(root.der);
+            this.Primeros(root.izq);
+            this.Primeros(root.der);
 
             if (root.EsHoja()) {
                 root.AgregarPrimero(root.id);
@@ -216,7 +216,68 @@ public class Arbol {
     }
 
     public void Ultimos(NodoArbol root) {
-        
+        if (root != null) {
+            this.Ultimos(root.izq);
+            this.Ultimos(root.der);
+
+            if (root.EsHoja()) {
+                root.AgregarUltimo(root.id);
+            } else {
+                if (root.tipo.equals("OR1")) {
+                    NodoPosicion izquierda = root.izq.ultimos.inicio;
+                    while (izquierda != null) {
+                        root.AgregarUltimo(izquierda.posicion);
+                        izquierda = izquierda.sig;
+                    }
+                    NodoPosicion derecha = root.der.ultimos.inicio;
+                    while (derecha != null) {
+                        root.AgregarUltimo(derecha.posicion);
+                        derecha = derecha.sig;
+                    }
+
+                } else if (root.tipo.equals("CONCAT1")) {
+                    if (root.der.anulable) {
+                        NodoPosicion izquierda = root.izq.ultimos.inicio;
+                        while (izquierda != null) {
+                            root.AgregarUltimo(izquierda.posicion);
+                            izquierda = izquierda.sig;
+                        }
+                        NodoPosicion derecha = root.der.ultimos.inicio;
+                        while (derecha != null) {
+                            root.AgregarUltimo(derecha.posicion);
+                            derecha = derecha.sig;
+                        }
+                    } else {
+                        NodoPosicion derecha = root.der.ultimos.inicio;
+                        while (derecha != null) {
+                            root.AgregarUltimo(derecha.posicion);
+                            derecha = derecha.sig;
+                        }
+                    }
+
+                } else if (root.tipo.equals("KLEENE")) {
+                    NodoPosicion derecha = root.der.ultimos.inicio;
+                    while (derecha != null) {
+                        root.AgregarUltimo(derecha.posicion);
+                        derecha = derecha.sig;
+                    }
+
+                } else if (root.tipo.equals("POSITIVE1")) {
+                    NodoPosicion derecha = root.der.ultimos.inicio;
+                    while (derecha != null) {
+                        root.AgregarPrimero(derecha.posicion);
+                        derecha = derecha.sig;
+                    }
+
+                } else if (root.tipo.equals("OPTIONAL1")) {
+                    NodoPosicion derecha = root.der.ultimos.inicio;
+                    while (derecha != null) {
+                        root.AgregarPrimero(derecha.posicion);
+                        derecha = derecha.sig;
+                    }
+                }
+            }
+        }
     }
 }
 /*

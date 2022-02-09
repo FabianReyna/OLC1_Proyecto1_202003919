@@ -5,6 +5,7 @@
  */
 package proyecto1_olc;
 
+import Metodo_Arbol.MetodoArbol;
 import analisis.parser;
 import analisis.scanner;
 import estructuras.ListaConjuntos;
@@ -12,6 +13,7 @@ import estructuras.ListaErrores;
 import estructuras.ListaExpRegular;
 import estructuras.ListaExpresiones;
 import estructuras.NodoError;
+import estructuras.NodoExpRegular;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -198,6 +200,11 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         jScrollPane2.setViewportView(jTextArea2);
 
         jButton1.setText("Generar Automatas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Analizar Entrada");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +256,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         try {
             errores = new ListaErrores();
             regularExpression = new ListaExpRegular();
-           
+
             conjuntos = new ListaConjuntos();
             String texto = jTextArea1.getText();
             scanner scan = new scanner(new BufferedReader(new StringReader(texto)));
@@ -257,10 +264,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             parser parser = new parser(scan);
             parser.parse();
             System.out.println("");
-            ListaExpRegular LR=regularExpression;
-            ListaConjuntos c=conjuntos;
-            System.out.println("");
-            
 
             File[] lista = null;
 
@@ -300,6 +303,16 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        NodoExpRegular ner = regularExpression.inicio;
+        while (ner != null) {
+            MetodoArbol me = new MetodoArbol(ner.le);
+            me.Ejecutar();
+            System.out.println("");
+            ner = ner.sig;
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
