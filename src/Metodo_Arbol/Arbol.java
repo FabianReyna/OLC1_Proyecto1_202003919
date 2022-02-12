@@ -5,6 +5,16 @@
  */
 package Metodo_Arbol;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import proyecto1_olc.Inicio;
+
 /**
  *
  * @author fabian
@@ -265,18 +275,127 @@ public class Arbol {
                 } else if (root.tipo.equals("POSITIVE1")) {
                     NodoPosicion derecha = root.der.ultimos.inicio;
                     while (derecha != null) {
-                        root.AgregarPrimero(derecha.posicion);
+                        root.AgregarUltimo(derecha.posicion);
                         derecha = derecha.sig;
                     }
 
                 } else if (root.tipo.equals("OPTIONAL1")) {
                     NodoPosicion derecha = root.der.ultimos.inicio;
                     while (derecha != null) {
-                        root.AgregarPrimero(derecha.posicion);
+                        root.AgregarUltimo(derecha.posicion);
                         derecha = derecha.sig;
                     }
                 }
             }
+        }
+    }
+
+    public String GenerarDot() {
+        String cadena = "digraph arbol {\n";
+        cadena += this.GenerarNodos(this.raiz);
+        cadena += this.EnlazarNodos(this.raiz);
+        cadena += "n_anulable [label=\"anulable\" color=\"red\" fontcolor=\"red\"]\n";
+        cadena += "n_ejemplo[label=\"" + "lexema" + "\\n" + "primeros" + "\\n" + "ultimos" + "\\n" + "id (hojas)" + "\"]\n";
+        cadena += "\n}";
+
+        return cadena;
+
+    }
+
+    public String GenerarNodos(NodoArbol na) {
+        String nodos = "";
+        if (na != null) {
+            nodos += this.GenerarNodos(na.izq);
+            nodos += this.GenerarNodos(na.der);
+            
+            na.lexema=na.lexema.replace("\"", "");
+
+            if (na.EsHoja()) {
+                nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + na.id + "\\n" + na.id + "\\n" + na.id + "\"]\n";
+            } else {
+                String primeros = na.primeros.CadenaListada();
+                String ultimos = na.ultimos.CadenaListada();
+                if (na.anulable) {
+                    nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\" color=\"red\" fontcolor=\"red\"]\n";
+                } else {
+                    nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\"]\n";
+                }
+
+            }
+
+        }
+
+        return nodos;
+    }
+
+    public String EnlazarNodos(NodoArbol na) {
+        String cadena = "";
+        if (na != null) {
+            cadena += this.EnlazarNodos(na.izq);
+            cadena += this.EnlazarNodos(na.der);
+
+            if (na.izq != null) {
+                cadena += "n" + na.id_grafica + "-> n" + na.izq.id_grafica + "\n";
+            }
+            if (na.der != null) {
+                cadena += "n" + na.id_grafica + "-> n" + na.der.id_grafica + "\n";
+            }
+        }
+        return cadena;
+    }
+
+    public void GenerarReporteGraphviz() {
+        File[] lista = null;
+        int numero = 0;
+        String directoryName = System.getProperty("user.dir");
+
+        File directorio = new File(directoryName+"/ARBOLES_202003919");
+        if (!directorio.exists()) {
+            if (!directorio.mkdirs()) {
+                JOptionPane.showMessageDialog(null, "error al crear el directorio");
+            }
+        } else {
+            lista = directorio.listFiles();
+        }
+
+        File f;
+        ProcessBuilder pb;
+        if (lista == null) {
+            f = new File(directoryName+"/ARBOLES_202003919/arbol.dot");
+            numero = -1;
+
+        } else {
+            if (lista.length == 0) {
+                f = new File(directoryName+"/ARBOLES_202003919/arbol.dot");
+                numero = -1;
+
+            } else {
+                f = new File(directoryName+"/ARBOLES_202003919/arbol" + lista.length + ".dot");
+                numero = lista.length;
+
+            }
+        }
+
+        try {
+            FileWriter br = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(br);
+            PrintWriter pr = new PrintWriter(bw);
+            pr.write(this.GenerarDot());
+            pr.close();
+            bw.close();
+            ProcessBuilder pbuilder;
+            if (numero == -1) {
+                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName+"/ARBOLES_202003919/arbol.pdf", directoryName+"/ARBOLES_202003919/arbol.dot");
+
+            } else {
+                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName+"/ARBOLES_202003919/arbol" + numero + ".pdf", directoryName+"/ARBOLES_202003919/arbol" + numero + ".dot");
+            }
+            pbuilder.redirectErrorStream(true);
+
+            pbuilder.start();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

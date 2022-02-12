@@ -29,8 +29,7 @@ public class Proyecto1_OLC {
 
         Inicio in = new Inicio();
         in.setVisible(true);
-        String cadena = "\\\\";
-        System.out.println(cadena);
+
 
         errores = new ListaErrores();
         regularExpression = new ListaExpRegular();

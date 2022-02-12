@@ -36,9 +36,9 @@ terminal String CONCAT1, OR1, KLEENE1, POSITIVE1, OPTIONAL1;
 
 
 nonterminal INICIO, INSTRUCCIONES, INSTRUCCION, INSTRUCCION2, END, SEPARADORES1;
-nonterminal CONJUNTOS, IDENTIFICATOR,IDENTIFICATOR2, REG_EXP, LISTA_EXP, DEF_EXP, DEF_EXP_REG; 
+nonterminal CONJUNTOS, IDENTIFICATOR,IDENTIFICATOR2,IDENTIFICATOR3, REG_EXP, LISTA_EXP, DEF_EXP; 
 nonterminal VAR_CONJ, VAR_CONJ2, MAS_CAR, MAS_EXP_POL;
-nonterminal String CHAAR,EXP_POL, EXP_CONJ;
+nonterminal String CHAAR,EXP_POL, EXP_CONJ,EXP_CONJ2;
 
 start with INICIO;
 
@@ -110,12 +110,17 @@ MAS_CAR::= COMA CHAAR:c MAS_CAR
             :}
 ;
            
-
-IDENTIFICATOR::= ID:id 
+IDENTIFICATOR3::=ID:id 
                 {:
                 identi=id;
                 :}
-                IDENTIFICATOR2;
+                | LETRA:le
+                {:
+                identi=le;
+                :};
+
+IDENTIFICATOR::= IDENTIFICATOR3 IDENTIFICATOR2;
+
                 
 IDENTIFICATOR2::= REG_EXP
                  | LISTA_EXP;
@@ -183,12 +188,20 @@ EXP_POL::= CONCAT1:co
             esCon=true;
             :}
             ;
-EXP_CONJ::= LLAVE1 ID:id LLAVE2
+EXP_CONJ::= LLAVE1 EXP_CONJ2:ec2 LLAVE2
+            {:
+            RESULT=ec2;
+            :}
+;
+EXP_CONJ2::= ID:id
             {:
             RESULT=id;
             :}
-;
-
+            |
+            LETRA:le
+            {:
+            RESULT=le;
+            :};
 LISTA_EXP::= DOSPUNTOS DEF_EXP;
 DEF_EXP::= CADENA:ca PUNTOCOMA
             {:

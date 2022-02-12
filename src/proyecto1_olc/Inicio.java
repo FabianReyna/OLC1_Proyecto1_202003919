@@ -8,6 +8,7 @@ package proyecto1_olc;
 import Metodo_Arbol.MetodoArbol;
 import analisis.parser;
 import analisis.scanner;
+import com.itextpdf.text.DocumentException;
 import estructuras.ListaConjuntos;
 import estructuras.ListaErrores;
 import estructuras.ListaExpRegular;
@@ -263,11 +264,15 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
             parser parser = new parser(scan);
             parser.parse();
+            JOptionPane.showMessageDialog(this,"Escaneo finalizado");
             System.out.println("");
-
+            ListaExpRegular ler=regularExpression;
+            
+            
+            String directoryName = System.getProperty("user.dir");
             File[] lista = null;
 
-            File directorio = new File("/ERRORES_202003919");
+            File directorio = new File(directoryName+"/ERRORES_202003919");
             if (!directorio.exists()) {
                 if (!directorio.mkdirs()) {
                     JOptionPane.showMessageDialog(null, "error al crear el directorio");
@@ -278,12 +283,12 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
             File f;
             if (lista == null) {
-                f = new File("/ERRORES_202003919/errores.html");
+                f = new File(directoryName+"/ERRORES_202003919/errores.html");
             } else {
                 if (lista.length == 0) {
-                    f = new File("/ERRORES_202003919/errores.html");
+                    f = new File(directoryName+"/ERRORES_202003919/errores.html");
                 } else {
-                    f = new File("/ERRORES_202003919/errores" + lista.length + ".html");
+                    f = new File(directoryName+"/ERRORES_202003919/errores" + lista.length + ".html");
                 }
             }
 
@@ -308,8 +313,12 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         NodoExpRegular ner = regularExpression.inicio;
         while (ner != null) {
             MetodoArbol me = new MetodoArbol(ner.le);
-            me.Ejecutar();
-            System.out.println("");
+            try {
+                me.Ejecutar();
+            } catch (IOException | DocumentException ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             ner = ner.sig;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
