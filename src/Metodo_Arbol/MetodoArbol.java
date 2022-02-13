@@ -51,7 +51,7 @@ public class MetodoArbol {
         int estadoActual = 0;
         String buffer = "";
 
-        for (int i = 1; i < cadena.length() - 1; i++) {
+        for (int i = 1; i < cadena.length(); i++) {
             if (estadoActual == -1) {
                 return false;
             }
@@ -60,27 +60,31 @@ public class MetodoArbol {
             NodoTerminal aux2 = estado.terminales.inicio;
             buffer += c;
             while (aux2 != null) {
-                
-                if (conjuntos.VerificaConjunto(aux2.terminal)) {
-                    NodoConjunto conj = conjuntos.ObtenerConjunto(aux2.terminal);
-                    if (conjuntos.CumpleRegla(conj, c)) {
-                        estadoActual = aux2.estado;
-                        buffer = "";
-                        break;
-                    }
-                } else {
-
-                    if (aux2.terminal.equals(String.valueOf(c))) {
-                        estadoActual = aux2.estado;
-                        buffer = "";
-                        break;
-                    }
+                if (buffer.length() > 1) {
                     if (aux2.terminal.equals(buffer)) {
                         estadoActual = aux2.estado;
                         buffer = "";
                         break;
                     }
+                } else {
+                    if (conjuntos.VerificaConjunto(aux2.terminal)) {
+                        NodoConjunto conj = conjuntos.ObtenerConjunto(aux2.terminal);
+                        if (conjuntos.CumpleRegla(conj, c)) {
+                            estadoActual = aux2.estado;
+                            buffer = "";
+                            break;
+                        }
+                    } else {
+
+                        if (aux2.terminal.equals(String.valueOf(c))) {
+                            estadoActual = aux2.estado;
+                            buffer = "";
+                            break;
+                        }
+
+                    }
                 }
+
                 aux2 = aux2.sig;
             }
         }
@@ -95,11 +99,11 @@ public class MetodoArbol {
         this.a.Ultimos(this.a.raiz);
         this.siguientes.CrearNodos(this.a.raiz);
         this.siguientes.AgregandoSiguientes(this.a.raiz);
-        //this.a.GenerarReporteGraphviz();
-        //this.siguientes.GraficaPDF();
+        this.a.GenerarReporteGraphviz();
+        this.siguientes.GraficaPDF();
         this.transiciones.CargaSiguientes(this.siguientes, this.a.raiz);
-        //this.transiciones.ReporteTransiciones();
-        //this.transiciones.AFD_Graphviz();
+        this.transiciones.ReporteTransiciones();
+        this.transiciones.AFD_Graphviz();
         System.out.println("" + this.EscaneaCadena(this.cadena));
     }
 

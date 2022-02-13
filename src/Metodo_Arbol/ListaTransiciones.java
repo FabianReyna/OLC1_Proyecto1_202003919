@@ -259,7 +259,6 @@ public class ListaTransiciones {
             while (aux2 != null) {
                 if (aux2.estado != -1) {
                     String termina = String.valueOf(aux2.terminal);
-                    termina = termina.replace("\"", "\'");
                     termina = termina.replace("\\", "\\\\");
                     cadena += "n" + aux.estado + "->n" + aux2.estado + "[label=\"" + termina + "\"];\n";
                 }

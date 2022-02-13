@@ -37,9 +37,12 @@ public class NodoExpresion {
                 break;
             default:
                 this.tipo = "TERMINAL";
+                if (this.lexema.charAt(0) == '_') {
+                    this.lexema = this.lexema.substring(1);
+                }
+
                 break;
         }
     }
-
 
 }

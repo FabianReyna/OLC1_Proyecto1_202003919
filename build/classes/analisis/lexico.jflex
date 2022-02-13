@@ -40,8 +40,6 @@ KLEENE1 = "*"
 POSITIVE1 = "+"
 OPTIONAL1 = "?"
 CARACTER = [\!\#\$\%\&\'\(\)\-\.\/\:\;\<\>\@\[\\\]\^\_\`]
-COMILLA1 = \\\'
-COMILLA2 = \\\"
 
 //comentarios y espacios en blanco
 SPACE = [\ \r\t\f\t]
@@ -67,6 +65,7 @@ COM2 = \<\!(\s*|.*?)*\!\>
 <YYINITIAL> {FLECHA}      { return new Symbol(sym.FLECHA, yyline, yycolumn,yytext());}
 <YYINITIAL> {SEPARADOR}      { return new Symbol(sym.SEPARADOR, yyline, yycolumn,yytext());}
 <YYINITIAL> {COMA}      { return new Symbol(sym.COMA, yyline, yycolumn,yytext());}
+<YYINITIAL> [\"]        { yybegin(CADENA); cadena="_"; }
 <YYINITIAL> {CONCAT1}      { return new Symbol(sym.CONCAT1, yyline, yycolumn,yytext());}
 <YYINITIAL> {OR1}      { return new Symbol(sym.OR1, yyline, yycolumn,yytext());}
 <YYINITIAL> {KLEENE1}      { return new Symbol(sym.KLEENE1, yyline, yycolumn,yytext());}
@@ -74,10 +73,8 @@ COM2 = \<\!(\s*|.*?)*\!\>
 <YYINITIAL> {OPTIONAL1}      { return new Symbol(sym.OPTIONAL1, yyline, yycolumn,yytext());}
 <YYINITIAL> {OPTIONAL1}      { return new Symbol(sym.OPTIONAL1, yyline, yycolumn,yytext());}
 <YYINITIAL> {CARACTER}      { return new Symbol(sym.CARACTER, yyline, yycolumn,yytext());}
-<YYINITIAL> [\"]        { yybegin(CADENA); cadena+="\""; }
+
 <YYINITIAL> [A-Za-zñÑ]        { yybegin(LETRA); letter=yytext(); }
-<YYINITIAL> {COMILLA1} { return new Symbol(sym.COMILLA1, yyline, yycolumn,yytext());}
-<YYINITIAL> {COMILLA2} { return new Symbol(sym.COMILLA2, yyline, yycolumn,yytext());}
 <YYINITIAL> {ENTERO} { return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {COM1} { }
 <YYINITIAL> {COM2} { }
@@ -90,7 +87,7 @@ COM2 = \<\!(\s*|.*?)*\!\>
 }
 
 <CADENA>{
-        [\"] {String tmp=cadena+"\""; cadena=""; yybegin(YYINITIAL); return new Symbol(sym.CADENA, yychar,yyline,tmp);}
+        [\"] {String tmp=cadena; cadena=""; yybegin(YYINITIAL); return new Symbol(sym.CADENA, yychar,yyline,tmp);}
         [\n] {cadena="";
                 errores.NewError("Lexico", "Se esperaba cierre de cadena",yyline+1,yycolumn+1);
                 System.out.println("Se esperaba cierre de cadena");

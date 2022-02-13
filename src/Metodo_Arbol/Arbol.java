@@ -311,8 +311,8 @@ public class Arbol {
             nodos += this.GenerarNodos(na.izq);
             nodos += this.GenerarNodos(na.der);
             String lexer = String.valueOf(na.lexema);
-            lexer = lexer.replace("\"", "\'");
             lexer = lexer.replace("\\", "\\\\");
+
 
             if (na.EsHoja()) {
                 nodos += "n" + na.id_grafica + "[label=\"" + lexer + "\\n" + na.id + "\\n" + na.id + "\\n" + na.id + "\"]\n";
