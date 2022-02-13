@@ -5,9 +5,13 @@
  */
 package Metodo_Arbol;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,11 +29,13 @@ public class ListaSiguientes {
     public NodoSiguientes inicio;
     public NodoSiguientes fin;
     public int size;
+    public String identificador;
 
-    public ListaSiguientes() {
+    public ListaSiguientes(String id) {
         this.inicio = null;
         this.fin = null;
         this.size = 0;
+        this.identificador = id;
     }
 
     public void AgregarTerminales(String t, int i) {
@@ -133,6 +139,9 @@ public class ListaSiguientes {
 
         PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
         documento.open();
+        documento.add(new Paragraph("Siguientes" + this.identificador,FontFactory.getFont("arial", 22, Font.BOLD, BaseColor.BLACK)));
+        documento.add(Chunk.NEWLINE);
+        documento.add(Chunk.NEWLINE);
 
         PdfPTable tabla = new PdfPTable(3);
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
@@ -185,5 +194,16 @@ public class ListaSiguientes {
         }
 
         return "";
+    }
+
+    public int ObtenerFC() {
+        NodoSiguientes aux = this.inicio;
+        while (aux != null) {
+            if (aux.Terminal.equals("#")) {
+                return aux.id_hoja;
+            }
+            aux = aux.sig;
+        }
+        return -1;
     }
 }

@@ -21,18 +21,20 @@ import proyecto1_olc.Inicio;
  */
 public class Arbol {
 
+    public String identificador;
     public NodoArbol raiz;
     public boolean flag;
     public ListaPila NonTerm;
     public int contador;
     private int contador2;
 
-    public Arbol() {
+    public Arbol(String id) {
         this.raiz = null;
         this.flag = false;
         this.NonTerm = new ListaPila();
         this.contador = 1;
         this.contador2 = 1;
+        this.identificador = id;
 
     }
 
@@ -296,6 +298,7 @@ public class Arbol {
         cadena += this.EnlazarNodos(this.raiz);
         cadena += "n_anulable [label=\"anulable\" color=\"red\" fontcolor=\"red\"]\n";
         cadena += "n_ejemplo[label=\"" + "lexema" + "\\n" + "primeros" + "\\n" + "ultimos" + "\\n" + "id (hojas)" + "\"]\n";
+        cadena += "n_identificador [label=\"" + this.identificador + "\"]\n";
         cadena += "\n}";
 
         return cadena;
@@ -307,18 +310,19 @@ public class Arbol {
         if (na != null) {
             nodos += this.GenerarNodos(na.izq);
             nodos += this.GenerarNodos(na.der);
-            
-            na.lexema=na.lexema.replace("\"", "");
+            String lexer = String.valueOf(na.lexema);
+            lexer = lexer.replace("\"", "\'");
+            lexer = lexer.replace("\\", "\\\\");
 
             if (na.EsHoja()) {
-                nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + na.id + "\\n" + na.id + "\\n" + na.id + "\"]\n";
+                nodos += "n" + na.id_grafica + "[label=\"" + lexer + "\\n" + na.id + "\\n" + na.id + "\\n" + na.id + "\"]\n";
             } else {
                 String primeros = na.primeros.CadenaListada();
                 String ultimos = na.ultimos.CadenaListada();
                 if (na.anulable) {
-                    nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\" color=\"red\" fontcolor=\"red\"]\n";
+                    nodos += "n" + na.id_grafica + "[label=\"" + lexer + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\" color=\"red\" fontcolor=\"red\"]\n";
                 } else {
-                    nodos += "n" + na.id_grafica + "[label=\"" + na.lexema + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\"]\n";
+                    nodos += "n" + na.id_grafica + "[label=\"" + lexer + "\\n" + primeros + "\\n" + ultimos + "\\n" + "\"]\n";
                 }
 
             }
@@ -349,7 +353,7 @@ public class Arbol {
         int numero = 0;
         String directoryName = System.getProperty("user.dir");
 
-        File directorio = new File(directoryName+"/ARBOLES_202003919");
+        File directorio = new File(directoryName + "/ARBOLES_202003919");
         if (!directorio.exists()) {
             if (!directorio.mkdirs()) {
                 JOptionPane.showMessageDialog(null, "error al crear el directorio");
@@ -361,16 +365,16 @@ public class Arbol {
         File f;
         ProcessBuilder pb;
         if (lista == null) {
-            f = new File(directoryName+"/ARBOLES_202003919/arbol.dot");
+            f = new File(directoryName + "/ARBOLES_202003919/arbol.dot");
             numero = -1;
 
         } else {
             if (lista.length == 0) {
-                f = new File(directoryName+"/ARBOLES_202003919/arbol.dot");
+                f = new File(directoryName + "/ARBOLES_202003919/arbol.dot");
                 numero = -1;
 
             } else {
-                f = new File(directoryName+"/ARBOLES_202003919/arbol" + lista.length + ".dot");
+                f = new File(directoryName + "/ARBOLES_202003919/arbol" + lista.length + ".dot");
                 numero = lista.length;
 
             }
@@ -385,17 +389,16 @@ public class Arbol {
             bw.close();
             ProcessBuilder pbuilder;
             if (numero == -1) {
-                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName+"/ARBOLES_202003919/arbol.pdf", directoryName+"/ARBOLES_202003919/arbol.dot");
+                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName + "/ARBOLES_202003919/arbol.pdf", directoryName + "/ARBOLES_202003919/arbol.dot");
 
             } else {
-                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName+"/ARBOLES_202003919/arbol" + numero + ".pdf", directoryName+"/ARBOLES_202003919/arbol" + numero + ".dot");
+                pbuilder = new ProcessBuilder("dot", "-Tpdf", "-o", directoryName + "/ARBOLES_202003919/arbol" + numero + ".pdf", directoryName + "/ARBOLES_202003919/arbol" + numero + ".dot");
             }
             pbuilder.redirectErrorStream(true);
 
             pbuilder.start();
 
         } catch (IOException ex) {
-            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

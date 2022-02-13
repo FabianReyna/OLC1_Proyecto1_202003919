@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -56,6 +57,65 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
     JMenuItem i4 = new JMenuItem("Guardar Como");
     String actual_file = "";
 
+    /*public void cargaListas() {
+        String directoryName = System.getProperty("user.dir");
+        jList1.clearSelection();
+        jList2.clearSelection();
+        jList3.clearSelection();
+        jList4.clearSelection();
+
+        File arboles = new File(directoryName + "/ARBOLES_202003919");
+        if (arboles.exists()) {
+            String[] lista_arboles = arboles.list();
+            if (lista_arboles != null || lista_arboles.length != 0) {
+                DefaultListModel modelo = new DefaultListModel();
+                for (int i = 0; i < lista_arboles.length; i++) {
+                    modelo.addElement(lista_arboles[i]);
+                }
+                jList1.setModel(modelo);
+            }
+
+        }
+
+        File afds = new File(directoryName + "/AFD_202003919");
+        if (afds.exists()) {
+            String[] lista_afs = afds.list();
+            if (lista_afs != null || lista_afs.length != 0) {
+                DefaultListModel modelo2 = new DefaultListModel();
+                for (int i = 0; i < lista_afs.length; i++) {
+                    modelo2.addElement(lista_afs[i]);
+                }
+                jList2.setModel(modelo2);
+            }
+        }
+
+        File sigs = new File(directoryName + "/SIGUIENTES_202003919");
+        if (sigs.exists()) {
+            String[] lista_sig = sigs.list();
+            if (lista_sig != null || lista_sig.length != 0) {
+                DefaultListModel modelo3 = new DefaultListModel();
+                for (int i = 0; i < lista_sig.length; i++) {
+                    modelo3.addElement(lista_sig[i]);
+                }
+                jList3.setModel(modelo3);
+
+            }
+        }
+
+        File trans = new File(directoryName + "/TRANSICIONES_202003919");
+        if (trans.exists()) {
+            String[] lista_trans = trans.list();
+            if (lista_trans != null || lista_trans.length != 0) {
+                DefaultListModel modelo4 = new DefaultListModel();
+                for (int i = 0; i < lista_trans.length; i++) {
+                    modelo4.addElement(lista_trans[i]);
+                }
+                jList4.setModel(modelo4);
+            }
+        }
+
+    }*/
+
     public Inicio() {
 
         initComponents();
@@ -72,7 +132,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
         mb.add(menu);
         this.setJMenuBar(mb);
-
+      
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -189,7 +249,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         jLabel1.setText("Archivo de Entrada");
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -221,12 +281,13 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jButton1)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton2))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(22, 22, 22)
+                            .addComponent(jButton1)
+                            .addGap(40, 40, 40)
+                            .addComponent(jButton2)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 814, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
@@ -237,7 +298,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -245,9 +306,9 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(44, 44, 44)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -264,15 +325,15 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
             parser parser = new parser(scan);
             parser.parse();
-            JOptionPane.showMessageDialog(this,"Escaneo finalizado");
+            JOptionPane.showMessageDialog(this, "Escaneo finalizado");
             System.out.println("");
-            ListaExpRegular ler=regularExpression;
-            
-            
+            ListaExpRegular ler = regularExpression;
+            ListaConjuntos cc=conjuntos;
+
             String directoryName = System.getProperty("user.dir");
             File[] lista = null;
 
-            File directorio = new File(directoryName+"/ERRORES_202003919");
+            File directorio = new File(directoryName + "/ERRORES_202003919");
             if (!directorio.exists()) {
                 if (!directorio.mkdirs()) {
                     JOptionPane.showMessageDialog(null, "error al crear el directorio");
@@ -283,12 +344,12 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
             File f;
             if (lista == null) {
-                f = new File(directoryName+"/ERRORES_202003919/errores.html");
+                f = new File(directoryName + "/ERRORES_202003919/errores.html");
             } else {
                 if (lista.length == 0) {
-                    f = new File(directoryName+"/ERRORES_202003919/errores.html");
+                    f = new File(directoryName + "/ERRORES_202003919/errores.html");
                 } else {
-                    f = new File(directoryName+"/ERRORES_202003919/errores" + lista.length + ".html");
+                    f = new File(directoryName + "/ERRORES_202003919/errores" + lista.length + ".html");
                 }
             }
 
@@ -312,15 +373,17 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         NodoExpRegular ner = regularExpression.inicio;
         while (ner != null) {
-            MetodoArbol me = new MetodoArbol(ner.le);
+
+            MetodoArbol me = new MetodoArbol(ner.le, ner.id,ner.valor);
             try {
                 me.Ejecutar();
             } catch (IOException | DocumentException ex) {
                 Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             ner = ner.sig;
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
