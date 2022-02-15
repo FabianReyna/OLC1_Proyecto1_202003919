@@ -91,7 +91,7 @@ public class ListaTransiciones {
         
         NodoTransicion aux2 = this.inicio;
         while (aux2 != null) {
-            System.out.println("" + aux2.estado);
+      
             
             NodoPosicion position = aux2.pos.inicio;
             while (position != null) {

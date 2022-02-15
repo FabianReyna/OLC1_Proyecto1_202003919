@@ -24,7 +24,7 @@ public class MetodoArbol {
     public Arbol a;
     public ListaSiguientes siguientes;
     public ListaTransiciones transiciones;
-    private String cadena;
+    public String cadena;
 
     public MetodoArbol(ListaExpresiones expresiones, String id, String cadena) {
         this.identificador = id;
@@ -47,7 +47,8 @@ public class MetodoArbol {
         this.a.AgregarNodo("#", "FINCADENA");
     }
 
-    public boolean EscaneaCadena(String cadena) {
+    public boolean EscaneaCadena() {
+        String cadena = this.cadena;
         int estadoActual = 0;
         String buffer = "";
 
@@ -92,6 +93,30 @@ public class MetodoArbol {
         return this.transiciones.EstadoAceptacion(estadoActual);
     }
 
+    public String Salida(boolean valida) {
+        String valor = this.cadena;
+        String exp = this.identificador;
+        String cadena;
+        if (valida) {
+            cadena = "La expresion \"" + valor + "\" es valida con la expresion regular " + exp;
+        } else {
+            cadena = "La expresion \"" + valor + "\" es invalida con la expresion regular " + exp;
+        }
+        return cadena;
+    }
+
+    public String GenerandoJSON(boolean valida) {
+        String valor = this.cadena;
+        String exp = this.identificador;
+        String cadena;
+        if (valida) {
+            cadena = "{\"Valor\":\"" + valor + "\", \"ExpresionRegular\":\"" + exp + "\", \"Resultado\":\"Cadena Valida\"}";
+        } else {
+            cadena = "{\"Valor\":\"" + valor + "\", \"ExpresionRegular\":\"" + exp + "\", \"Resultado\":\"Cadena Invalida\"}";
+        }
+        return cadena;
+    }
+
     public void Ejecutar() throws IOException, FileNotFoundException, DocumentException {
         this.a.Identifica_Hojas(this.a.raiz);
         this.a.Anulables(this.a.raiz);
@@ -104,7 +129,7 @@ public class MetodoArbol {
         this.transiciones.CargaSiguientes(this.siguientes, this.a.raiz);
         this.transiciones.ReporteTransiciones();
         this.transiciones.AFD_Graphviz();
-        System.out.println("" + this.EscaneaCadena(this.cadena));
+
     }
 
 }

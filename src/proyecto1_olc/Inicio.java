@@ -35,6 +35,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import static proyecto1_olc.Proyecto1_OLC.conjuntos;
 import static proyecto1_olc.Proyecto1_OLC.errores;
 import static proyecto1_olc.Proyecto1_OLC.regularExpression;
@@ -115,7 +117,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         }
 
     }*/
-
     public Inicio() {
 
         initComponents();
@@ -132,7 +133,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
         mb.add(menu);
         this.setJMenuBar(mb);
-      
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -326,9 +327,9 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             parser parser = new parser(scan);
             parser.parse();
             JOptionPane.showMessageDialog(this, "Escaneo finalizado");
-            System.out.println("");
+
             ListaExpRegular ler = regularExpression;
-            ListaConjuntos cc=conjuntos;
+            ListaConjuntos cc = conjuntos;
 
             String directoryName = System.getProperty("user.dir");
             File[] lista = null;
@@ -372,18 +373,66 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         NodoExpRegular ner = regularExpression.inicio;
+        JSONArray ja = new JSONArray();
         while (ner != null) {
 
-            MetodoArbol me = new MetodoArbol(ner.le, ner.id,ner.valor);
+            MetodoArbol me = new MetodoArbol(ner.le, ner.id, ner.valor);
             try {
                 me.Ejecutar();
+                if (!(ner.valor.equals(""))) {
+                    boolean validar = me.EscaneaCadena();
+                    String txt = me.Salida(validar);
+
+                    String txt2 = me.GenerandoJSON(validar);
+                    JSONObject ob = new JSONObject(txt2);
+                    ja.put(ob);
+                    jTextArea2.append(txt+"\n");
+                }
             } catch (IOException | DocumentException ex) {
                 Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             ner = ner.sig;
         }
-        
+
+        File[] lista = null;
+        int numero = 0;
+        String directoryName = System.getProperty("user.dir");
+
+        File directorio = new File(directoryName + "/SALIDAS_202003919");
+        if (!directorio.exists()) {
+            if (!directorio.mkdirs()) {
+                JOptionPane.showMessageDialog(null, "error al crear el directorio");
+            }
+        } else {
+            lista = directorio.listFiles();
+        }
+
+        File f;
+        if (lista == null) {
+            f = new File(directoryName + "/SALIDAS_202003919/salida.json");
+            numero = -1;
+
+        } else {
+            if (lista.length == 0) {
+                f = new File(directoryName + "/SALIDAS_202003919/salida.json");
+                numero = -1;
+
+            } else {
+                f = new File(directoryName + "/SALIDAS_202003919/salida" + lista.length + ".json");
+                numero = lista.length;
+            }
+        }
+        try {
+            FileWriter br = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(br);
+            PrintWriter pr = new PrintWriter(bw);
+            pr.write(ja.toString());
+            pr.close();
+            bw.close();
+        } catch (IOException ex) {
+            System.out.println("" + ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

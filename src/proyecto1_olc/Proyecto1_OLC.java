@@ -88,7 +88,7 @@ public class Proyecto1_OLC {
         a.Identifica_Hojas(a.raiz);
         a.Anulables(a.raiz);*/
         
-        System.out.println("");
+
 
     }
 
