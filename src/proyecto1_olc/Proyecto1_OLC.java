@@ -5,12 +5,8 @@
  */
 package proyecto1_olc;
 
-import Metodo_Arbol.*;
-import analisis.parser;
-import analisis.scanner;
+
 import estructuras.*;
-import java.io.BufferedReader;
-import java.io.StringReader;
 
 /**
  *

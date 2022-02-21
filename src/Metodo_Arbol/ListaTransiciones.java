@@ -15,6 +15,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -158,7 +159,8 @@ public class ListaTransiciones {
         }
     }
     
-    public void ReporteTransiciones() throws FileNotFoundException, DocumentException {
+    public void ReporteTransiciones() throws FileNotFoundException, DocumentException, IOException {
+        
         File[] lista = null;
         int numero = 0;
         String directoryName = System.getProperty("user.dir");
@@ -193,7 +195,7 @@ public class ListaTransiciones {
         
         PdfWriter.getInstance(documento, ficheroPdf);
         documento.open();
-        documento.add(new Paragraph("Siguientes" + this.identificador, FontFactory.getFont("arial", 22, Font.BOLD, BaseColor.BLACK)));
+        documento.add(new Paragraph("Transiciones " + this.identificador, FontFactory.getFont("arial", 22, Font.BOLD, BaseColor.BLACK)));
         documento.add(Chunk.NEWLINE);
         documento.add(Chunk.NEWLINE);
         int sizeTable = 1 + this.inicio.terminales.size;
@@ -231,7 +233,7 @@ public class ListaTransiciones {
         }
         documento.add(tabla);
         documento.close();
-    }
+            }
     
     public String GenerarDot() {
         
@@ -319,6 +321,7 @@ public class ListaTransiciones {
             pbuilder.redirectErrorStream(true);
             
             pbuilder.start();
+            
             
         } catch (IOException ex) {
             System.out.println("" + ex);

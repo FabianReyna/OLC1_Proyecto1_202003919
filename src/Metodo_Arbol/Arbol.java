@@ -5,6 +5,7 @@
  */
 package Metodo_Arbol;
 
+import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -363,7 +364,7 @@ public class Arbol {
         }
 
         File f;
-        ProcessBuilder pb;
+        
         if (lista == null) {
             f = new File(directoryName + "/ARBOLES_202003919/arbol.dot");
             numero = -1;
@@ -397,7 +398,7 @@ public class Arbol {
             pbuilder.redirectErrorStream(true);
 
             pbuilder.start();
-
+            
         } catch (IOException ex) {
         }
     }

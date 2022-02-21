@@ -9,6 +9,8 @@ import com.itextpdf.text.DocumentException;
 import estructuras.ListaExpresiones;
 import estructuras.NodoConjunto;
 import estructuras.NodoExpresion;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static proyecto1_olc.Proyecto1_OLC.conjuntos;
@@ -97,6 +99,10 @@ public class MetodoArbol {
         String valor = this.cadena;
         String exp = this.identificador;
         String cadena;
+        if (valor.charAt(0) == '_') {
+            valor = valor.substring(1);
+        }
+        
         if (valida) {
             cadena = "La expresion \"" + valor + "\" es valida con la expresion regular " + exp;
         } else {
@@ -109,6 +115,9 @@ public class MetodoArbol {
         String valor = this.cadena;
         String exp = this.identificador;
         String cadena;
+        if (valor.charAt(0) == '_') {
+            valor = valor.substring(1);
+        }
         if (valida) {
             cadena = "{\"Valor\":\"" + valor + "\", \"ExpresionRegular\":\"" + exp + "\", \"Resultado\":\"Cadena Valida\"}";
         } else {
@@ -118,6 +127,7 @@ public class MetodoArbol {
     }
 
     public void Ejecutar() throws IOException, FileNotFoundException, DocumentException {
+        String directoryName = System.getProperty("user.dir");
         this.a.Identifica_Hojas(this.a.raiz);
         this.a.Anulables(this.a.raiz);
         this.a.Primeros(this.a.raiz);
@@ -129,7 +139,7 @@ public class MetodoArbol {
         this.transiciones.CargaSiguientes(this.siguientes, this.a.raiz);
         this.transiciones.ReporteTransiciones();
         this.transiciones.AFD_Graphviz();
-
+       
     }
 
 }

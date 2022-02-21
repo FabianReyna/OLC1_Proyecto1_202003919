@@ -15,9 +15,11 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 
 /**
@@ -106,7 +108,7 @@ public class ListaSiguientes {
         }
     }
 
-    public void GraficaPDF() throws FileNotFoundException, DocumentException {
+    public void GraficaPDF() throws FileNotFoundException, DocumentException, IOException {
         File[] lista = null;
         int numero = 0;
         String directoryName = System.getProperty("user.dir");
@@ -139,7 +141,7 @@ public class ListaSiguientes {
 
         PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
         documento.open();
-        documento.add(new Paragraph("Siguientes" + this.identificador,FontFactory.getFont("arial", 22, Font.BOLD, BaseColor.BLACK)));
+        documento.add(new Paragraph("Siguientes " + this.identificador,FontFactory.getFont("arial", 22, Font.BOLD, BaseColor.BLACK)));
         documento.add(Chunk.NEWLINE);
         documento.add(Chunk.NEWLINE);
 
