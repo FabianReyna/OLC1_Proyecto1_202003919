@@ -9,8 +9,6 @@ import com.itextpdf.text.DocumentException;
 import estructuras.ListaExpresiones;
 import estructuras.NodoConjunto;
 import estructuras.NodoExpresion;
-import java.awt.Desktop;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static proyecto1_olc.Proyecto1_OLC.conjuntos;
@@ -127,7 +125,6 @@ public class MetodoArbol {
     }
 
     public void Ejecutar() throws IOException, FileNotFoundException, DocumentException {
-        String directoryName = System.getProperty("user.dir");
         this.a.Identifica_Hojas(this.a.raiz);
         this.a.Anulables(this.a.raiz);
         this.a.Primeros(this.a.raiz);

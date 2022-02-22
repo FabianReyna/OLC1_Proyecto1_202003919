@@ -6,6 +6,7 @@
 package proyecto1_olc;
 
 import Metodo_Arbol.MetodoArbol;
+import Thompson.MetodoThompson;
 import analisis.parser;
 import analisis.scanner;
 import com.itextpdf.text.DocumentException;
@@ -470,6 +471,12 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         NodoExpRegular ner = regularExpression.inicio;
         JSONArray ja = new JSONArray();
         while (ner != null) {
+            MetodoThompson mt=new MetodoThompson(ner.le, ner.id);
+            mt.Ejecutar();
+            mt.AFND_Graphviz();
+            System.out.println("");
+            
+            
 
             MetodoArbol me = new MetodoArbol(ner.le, ner.id, ner.valor);
             try {
@@ -486,7 +493,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             } catch (IOException | DocumentException ex) {
                 Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
             ner = ner.sig;
         }
 
