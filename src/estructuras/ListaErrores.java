@@ -36,6 +36,7 @@ public class ListaErrores {
                 + "th{background: Teal;color: white;} .dis{ background: LightSeaGreen;color: white;} "
                 + ".dis2{background: MediumAquamarine;}</style>\n</head>\n<body>\n<center></br>";
         if (this.inicio != null) {
+            reporte +="<h1>Reporte de Errores</h1><br><br>\n";
             reporte += "<table border='2'>\n<th>#</th>\n<th>Tipo de error</th>\n";
             reporte += "<th>Descripcion</th>\n<th>Linea</th>\n<th>Columna</th>\n";
             NodoError aux = this.inicio;

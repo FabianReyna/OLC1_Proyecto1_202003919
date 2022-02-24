@@ -89,6 +89,10 @@ public class MetodoArbol {
                 aux2 = aux2.sig;
             }
         }
+        
+        if(buffer.length()>0){
+            return false; 
+        }
 
         return this.transiciones.EstadoAceptacion(estadoActual);
     }

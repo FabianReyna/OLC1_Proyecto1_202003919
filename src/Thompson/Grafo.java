@@ -77,14 +77,16 @@ public class Grafo {
     public Grafo UnificarGrafos1(Grafo gInicio, Grafo gFin) {
         //final aux.sig se une a inicio aux.sig.sig
         //eliminar grafo aux.sig y aux.sig.sig
-        //guardar grafo nuevo
+        //guardar grafo nuevo        
         NodoG final1 = gInicio.ObtenerFinal();
+        final1.EsFinal=false;
         NodoG inicio2 = gFin.ObtenerInicial();
+        inicio2.inicial=false;
 
         //agregando los nodos de g2 a g1
         NodoG aux = gFin.inicio;
         while (aux != null) {
-            if (!(aux.inicial)) {
+            if (aux.id!=inicio2.id) {
                 gInicio.AgregarNodo(aux.id);
             }
             aux = aux.sig;
@@ -95,7 +97,7 @@ public class Grafo {
         while (aux != null) {
             NodoG aux2 = aux.transition.inicio;
             while (aux2 != null) {
-                if(aux2.id!=inicio2.id){
+                if(aux2.id!=inicio2.id && aux.id!=inicio2.id){
                     gInicio.AgregarTransicion(aux.id, aux2.id, aux2.peso);
                 }else{
                     gInicio.AgregarTransicion(final1.id, aux2.id, aux2.peso);
@@ -105,7 +107,7 @@ public class Grafo {
 
             aux = aux.sig;
         }
-
+        System.out.println("");
         return gInicio;
 
     }

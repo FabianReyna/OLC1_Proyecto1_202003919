@@ -10,7 +10,6 @@ import estructuras.NodoExpresion;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 
@@ -62,10 +61,10 @@ public class MetodoThompson {
                                 //guardar grafo nuevo
                                 try {
                                     int id_buscar1 = Integer.parseInt(aux.sig.lexema);
-                                    Grafo grafito1 = this.listaGrafos.BuscaGrafo(id_buscar1).g;
+                                    Grafo grafito1 = this.listaGrafos.BuscaGrafo(id_buscar1).g;                          
                                     int id_buscar2 = Integer.parseInt(aux.sig.sig.lexema);
                                     Grafo grafito2 = this.listaGrafos.BuscaGrafo(id_buscar2).g;
-
+                                    
                                     Grafo resultante = grafoAuxiliar.UnificarGrafos1(grafito1, grafito2);
                                     int NewGraph = listaGrafos.AgregarGrafo(resultante);
 

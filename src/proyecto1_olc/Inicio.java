@@ -145,7 +145,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             actual_file = "";
             jTextArea1.setText("");
             
-            System.out.println("nuevo archivo");
         } else if (e.getSource() == i2) {
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivo EXP", "EXP");
@@ -190,7 +189,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fc.getSelectedFile();
-                    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
                     File f = new File(fileToSave.getAbsolutePath() + ".exp");
                     try {
                         FileWriter br = new FileWriter(f);
@@ -211,7 +209,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
 
             if (userSelection == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = fc.getSelectedFile();
-                System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+
                 File f = new File(fileToSave.getAbsolutePath() + ".exp");
                 try {
                     FileWriter br = new FileWriter(f);
@@ -274,6 +272,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         jScrollPane2.setViewportView(jTextArea2);
 
         jButton1.setText("Generar Automatas");
+        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -301,6 +300,11 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         jButton4.setMaximumSize(new java.awt.Dimension(123, 32));
         jButton4.setMinimumSize(new java.awt.Dimension(123, 32));
         jButton4.setPreferredSize(new java.awt.Dimension(123, 32));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Siguientes");
         jButton5.setMaximumSize(new java.awt.Dimension(123, 32));
@@ -457,9 +461,9 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
                 pr.write(errores.ReporteHTML());
                 pr.close();
                 bw.close();
+                jButton1.setEnabled(true);
 
             } catch (IOException ex) {
-                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } catch (Exception ex) {
@@ -474,7 +478,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             MetodoThompson mt=new MetodoThompson(ner.le, ner.id);
             mt.Ejecutar();
             mt.AFND_Graphviz();
-            System.out.println("");
             
             
 
@@ -491,7 +494,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
                     jTextArea2.append(txt + "\n");
                 }
             } catch (IOException | DocumentException ex) {
-                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             ner = ner.sig;
@@ -535,7 +537,6 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             bw.close();
 
         } catch (IOException ex) {
-            System.out.println("" + ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -593,6 +594,15 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Carpeta no existente");
         }
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            String directoryName = System.getProperty("user.dir");
+            Desktop.getDesktop().open(new File(directoryName + "/AFND_202003919"));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Carpeta no existente");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
