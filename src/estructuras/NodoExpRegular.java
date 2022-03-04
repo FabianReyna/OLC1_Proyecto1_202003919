@@ -19,6 +19,7 @@ public class NodoExpRegular {
     public NodoExpRegular(String id,ListaExpresiones le) {
         this.id = id;
         this.le = le;
+        this.valor="";
         this.sig = null;
     }
 }
