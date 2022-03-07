@@ -10,6 +10,8 @@ import static proyecto1_olc.Proyecto1_OLC.errores;
 %{
     String cadena="";
     String letter="";
+    String comentario="";
+    boolean banderaComentario=false;
 %}
 
 %cup
@@ -22,7 +24,9 @@ import static proyecto1_olc.Proyecto1_OLC.errores;
 %state CADENA
 %state LETRA
 %state ID
-%ignorecase
+%state MULTICOMENTARIOS
+%state VERIFICACION
+
 //%debug
 
 //simbolos y caracteres especiales
@@ -39,7 +43,7 @@ OR1 = "|"
 KLEENE1 = "*"
 POSITIVE1 = "+"
 OPTIONAL1 = "?"
-CARACTER = [\!\#\$\%\&\'\(\)\-\.\/\:\;\<\>\@\[\\\]\^\_\`]
+CARACTER = [\!\#\$\%\&\'\(\)\-\.\/\:\;\>\@\[\\\]\^\_\`]
 
 //comentarios y espacios en blanco
 SPACE = [\ \r\t\f\t]
@@ -52,7 +56,7 @@ CONJ1 = "CONJ"
 ENTERO = [0-9]+
 
 COM1 = \/\/.*
-COM2 = \<\!(\s*|.*?)*\!\>
+COM2 = \<
 
 %%
 
@@ -72,14 +76,16 @@ COM2 = \<\!(\s*|.*?)*\!\>
 <YYINITIAL> {POSITIVE1}      { return new Symbol(sym.POSITIVE1, yyline, yycolumn,yytext());}
 <YYINITIAL> {OPTIONAL1}      { return new Symbol(sym.OPTIONAL1, yyline, yycolumn,yytext());}
 <YYINITIAL> {OPTIONAL1}      { return new Symbol(sym.OPTIONAL1, yyline, yycolumn,yytext());}
+<YYINITIAL> {COM2}        {yybegin(VERIFICACION); comentario=yytext();}
 <YYINITIAL> {CARACTER}      { return new Symbol(sym.CARACTER, yyline, yycolumn,yytext());}
 
 <YYINITIAL> [A-Za-zñÑ]        { yybegin(LETRA); letter=yytext(); }
 <YYINITIAL> {ENTERO} { return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
-<YYINITIAL> {COM1} { }
-<YYINITIAL> {COM2} { }
+
 <YYINITIAL> {SPACE} {  }
 <YYINITIAL> {ENTER} { }
+<YYINITIAL> {COM1}        {}
+
 
 <YYINITIAL> . {
         errores.NewError("Lexico", "El caracter '"+yytext()+"' no pertenece al lenguaje",yyline+1,yycolumn+1);
@@ -116,5 +122,29 @@ COM2 = \<\!(\s*|.*?)*\!\>
                 yybegin(YYINITIAL);
                 yypushback(1);
                 return new Symbol(sym.ID, yychar,yyline,tmp);}
+}
+<VERIFICACION>{
+        [^\!] {
+                String tmp=comentario;
+                comentario="";
+                yybegin(YYINITIAL);
+                yypushback(1);
+                return new Symbol(sym.CARACTER, yychar,yyline,tmp);}
+        [\!] {
+                yybegin(MULTICOMENTARIOS);
+                comentario="";
+                }
+}
+<MULTICOMENTARIOS>{
+    \! {banderaComentario=true;}
+    \> {
+            if(banderaComentario){
+                yybegin(YYINITIAL);
+            }else{
+                errores.NewError("Lexico", "Comentario Invalido",yyline+1,yycolumn+1);
+            }
+        }
+    [^\!\>] {}
+    
 }
 

@@ -31,6 +31,7 @@ public class MetodoThompson {
         this.terminales = new ListaDoble();
         this.listaGrafos = new ListaGrafos();
         this.CargarListaDoble();
+        this.grafo = new Grafo();
     }
 
     public void CargarListaDoble() {
@@ -61,10 +62,10 @@ public class MetodoThompson {
                                 //guardar grafo nuevo
                                 try {
                                     int id_buscar1 = Integer.parseInt(aux.sig.lexema);
-                                    Grafo grafito1 = this.listaGrafos.BuscaGrafo(id_buscar1).g;                          
+                                    Grafo grafito1 = this.listaGrafos.BuscaGrafo(id_buscar1).g;
                                     int id_buscar2 = Integer.parseInt(aux.sig.sig.lexema);
                                     Grafo grafito2 = this.listaGrafos.BuscaGrafo(id_buscar2).g;
-                                    
+
                                     Grafo resultante = grafoAuxiliar.UnificarGrafos1(grafito1, grafito2);
                                     int NewGraph = listaGrafos.AgregarGrafo(resultante);
 
@@ -430,7 +431,7 @@ public class MetodoThompson {
                                 grafoAuxiliar.AgregarTransicion(inicia.id, e2, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(finaliza.id, e2, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(finaliza.id, inicia.id, "EPSILON");
-                                
+
                                 NodoG auxiliar = grafoAuxiliar.BuscarNodo(e1);
                                 auxiliar.inicial = true;
                                 auxiliar = grafoAuxiliar.BuscarNodo(e2);
@@ -509,7 +510,7 @@ public class MetodoThompson {
                                 grafoAuxiliar.AgregarTransicion(e1, inicia.id, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(finaliza.id, e2, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(finaliza.id, inicia.id, "EPSILON");
-                                
+
                                 NodoG auxiliar = grafoAuxiliar.BuscarNodo(e1);
                                 auxiliar.inicial = true;
                                 auxiliar = grafoAuxiliar.BuscarNodo(e2);
@@ -551,7 +552,7 @@ public class MetodoThompson {
                 } else if (aux.tipo.equals("OPTIONAL1")) {
                     if (aux.sig != null) {
                         grafoAuxiliar = new Grafo();
-                        if (aux.sig.tipo.equals("GRAFO")) { // G*
+                        if (aux.sig.tipo.equals("GRAFO")) { // G?
                             try {
                                 int e1 = grafoAuxiliar.AgregarNodo(contador);
                                 int e2 = grafoAuxiliar.AgregarNodo(contador + 1);
@@ -587,7 +588,7 @@ public class MetodoThompson {
                                 grafoAuxiliar.AgregarTransicion(e1, inicia.id, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(finaliza.id, e2, "EPSILON");
                                 grafoAuxiliar.AgregarTransicion(e1, e2, "EPSILON");
-                                
+
                                 NodoG auxiliar = grafoAuxiliar.BuscarNodo(e1);
                                 auxiliar.inicial = true;
                                 auxiliar = grafoAuxiliar.BuscarNodo(e2);
@@ -671,7 +672,11 @@ public class MetodoThompson {
             NodoG aux2 = aux.transition.inicio;
             while (aux2 != null) {
                 String termina = String.valueOf(aux2.peso);
-                termina = termina.replace("\\", "\\\\");
+                if (!(termina.contains("\\\""))) {
+                    termina = termina.replace("\\", "\\\\");
+                }else{
+                    termina = termina.replace("\\\"", "\\\\\\\"");
+                }
                 cadena += "n" + aux.id + "->n" + aux2.id + "[label=\"" + termina + "\"];\n";
                 aux2 = aux2.sig;
             }

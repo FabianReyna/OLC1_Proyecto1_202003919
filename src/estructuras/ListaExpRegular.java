@@ -32,12 +32,14 @@ public class ListaExpRegular {
         this.fin = nuevo;
 
     }
+    
+   
 
     public void ActualizaValor(String id, String valor) {
         NodoExpRegular aux = this.inicio;
         while (aux != null) {
             if (aux.id.equals(id)) {
-                aux.valor = valor;
+                aux.valor.AgregarCadena(valor);
                 break;
             }
             aux = aux.sig;

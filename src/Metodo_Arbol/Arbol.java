@@ -312,8 +312,11 @@ public class Arbol {
             nodos += this.GenerarNodos(na.izq);
             nodos += this.GenerarNodos(na.der);
             String lexer = String.valueOf(na.lexema);
-            lexer = lexer.replace("\\", "\\\\");
-
+            if (!(lexer.contains("\""))) {
+                lexer = lexer.replace("\\", "\\\\");
+            } else {
+                lexer = lexer.replace("\\\"", "\\\\\\\"");
+            }
 
             if (na.EsHoja()) {
                 nodos += "n" + na.id_grafica + "[label=\"" + lexer + "\\n" + na.id + "\\n" + na.id + "\\n" + na.id + "\"]\n";
@@ -364,7 +367,7 @@ public class Arbol {
         }
 
         File f;
-        
+
         if (lista == null) {
             f = new File(directoryName + "/ARBOLES_202003919/arbol.dot");
             numero = -1;
@@ -398,7 +401,7 @@ public class Arbol {
             pbuilder.redirectErrorStream(true);
 
             pbuilder.start();
-            
+
         } catch (IOException ex) {
         }
     }

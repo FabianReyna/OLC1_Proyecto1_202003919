@@ -14,6 +14,8 @@ import estructuras.ListaConjuntos;
 import estructuras.ListaErrores;
 import estructuras.ListaExpRegular;
 import estructuras.ListaExpresiones;
+import estructuras.NodoCadena;
+import estructuras.NodoCaracter;
 import estructuras.NodoError;
 import estructuras.NodoExpRegular;
 import java.awt.Desktop;
@@ -144,7 +146,7 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         if (e.getSource() == i1) {
             actual_file = "";
             jTextArea1.setText("");
-            
+
         } else if (e.getSource() == i2) {
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivo EXP", "EXP");
@@ -475,27 +477,34 @@ public class Inicio extends javax.swing.JFrame implements ActionListener {
         NodoExpRegular ner = regularExpression.inicio;
         JSONArray ja = new JSONArray();
         while (ner != null) {
-            MetodoThompson mt=new MetodoThompson(ner.le, ner.id);
-            mt.Ejecutar();
-            mt.AFND_Graphviz();
-            
-            
-
-            MetodoArbol me = new MetodoArbol(ner.le, ner.id, ner.valor);
             try {
-                me.Ejecutar();
-                if (!(ner.valor.equals(""))) {
-                    boolean validar = me.EscaneaCadena();
-                    String txt = me.Salida(validar);
+                MetodoThompson mt = new MetodoThompson(ner.le, ner.id);
+                mt.Ejecutar();
+                mt.AFND_Graphviz();
 
-                    String txt2 = me.GenerandoJSON(validar);
-                    JSONObject ob = new JSONObject(txt2);
-                    ja.put(ob);
-                    jTextArea2.append(txt + "\n");
+                MetodoArbol me = new MetodoArbol(ner.le, ner.id);
+                try {
+                    me.Ejecutar();
+                    if (ner.valor.inicio != null) {
+                        NodoCadena auxiliar = ner.valor.inicio;
+                        while (auxiliar != null) {
+                            boolean validar = me.EscaneaCadena(auxiliar.cadena);
+                            String txt = me.Salida(validar, auxiliar.cadena);
+
+                            String txt2 = me.GenerandoJSON(validar, auxiliar.cadena);
+                            JSONObject ob = new JSONObject(txt2);
+                            ja.put(ob);
+                            jTextArea2.append(txt + "\n");
+                            auxiliar = auxiliar.sig;
+                        }
+
+                    }
+                } catch (IOException | DocumentException ex) {
                 }
-            } catch (IOException | DocumentException ex) {
+            } catch (NullPointerException npe) {
+                System.out.println("Null Pointer Encontrado");
             }
-            
+
             ner = ner.sig;
         }
 

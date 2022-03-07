@@ -59,7 +59,7 @@ INSTRUCCION::= CONJUNTOS
 SEPARADORES1::=SEPARADOR;
 CONJUNTOS::= CONJ1 DOSPUNTOS ID:id
             {:
-            nc=new NodoConjunto(id);
+            nc=new NodoConjunto(""+id);
             :} FLECHA VAR_CONJ;
             
 VAR_CONJ::=CHAAR:c 
@@ -71,14 +71,14 @@ VAR_CONJ::=CHAAR:c
 VAR_CONJ2::= GUIONC CHAAR:c PUNTOCOMA
             {:
             nc.rango=true;
-            nc.AgregaReglas(ch1);
-            nc.AgregaReglas(c);
+            nc.AgregaReglas(""+ch1);
+            nc.AgregaReglas(""+c);
             conjuntos.AgregarConjunto(nc);
             :}
             | MAS_CAR
             {:
             nc.rango=false;
-            nc.AgregaReglas(ch1);
+            nc.AgregaReglas(""+ch1);
             :}
             ;
 CHAAR::= CARACTER:ca
@@ -100,11 +100,26 @@ CHAAR::= CARACTER:ca
         | DOSPUNTOS
         {:
             RESULT=":";
+        :}
+        | LLAVE1
+        {:
+            RESULT="{";
+        :}
+        | LLAVE2
+        {:
+            RESULT="}";
+        :}
+        | CADENA:cad
+        {:
+            if (cad.charAt(0) == '_') {
+            cad = cad.substring(1);
+            }
+            RESULT=cad;
         :};
 
 MAS_CAR::= COMA CHAAR:c MAS_CAR
             {:
-            nc.AgregaReglas(c);
+            nc.AgregaReglas(""+c);
             :}
            | PUNTOCOMA
             {:

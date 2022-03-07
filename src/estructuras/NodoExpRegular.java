@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package estructuras;
-
+import estructuras.*;
 /**
  *
  * @author fabian
@@ -14,12 +14,12 @@ public class NodoExpRegular {
     public String id;
     public ListaExpresiones le;
     public NodoExpRegular sig;
-    public String valor;
+    public ListaCadenas valor;
 
     public NodoExpRegular(String id,ListaExpresiones le) {
         this.id = id;
         this.le = le;
-        this.valor="";
+        this.valor=new ListaCadenas();
         this.sig = null;
     }
 }

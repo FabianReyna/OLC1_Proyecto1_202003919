@@ -6,6 +6,7 @@
 package Metodo_Arbol;
 
 import com.itextpdf.text.DocumentException;
+import estructuras.ListaConjuntos;
 import estructuras.ListaExpresiones;
 import estructuras.NodoConjunto;
 import estructuras.NodoExpresion;
@@ -24,16 +25,14 @@ public class MetodoArbol {
     public Arbol a;
     public ListaSiguientes siguientes;
     public ListaTransiciones transiciones;
-    public String cadena;
 
-    public MetodoArbol(ListaExpresiones expresiones, String id, String cadena) {
+    public MetodoArbol(ListaExpresiones expresiones, String id) {
         this.identificador = id;
         this.expresiones = expresiones;
         this.a = new Arbol(id);
         this.CargarArbol();
         this.siguientes = new ListaSiguientes(id);
         this.transiciones = new ListaTransiciones(id);
-        this.cadena = cadena;
     }
 
     public void CargarArbol() {
@@ -47,10 +46,11 @@ public class MetodoArbol {
         this.a.AgregarNodo("#", "FINCADENA");
     }
 
-    public boolean EscaneaCadena() {
-        String cadena = this.cadena;
+    public boolean EscaneaCadena(String analizarCadena) {
+        String cadena = analizarCadena;
         int estadoActual = 0;
         String buffer = "";
+        ListaConjuntos conjAux = conjuntos;
 
         for (int i = 1; i < cadena.length(); i++) {
             if (estadoActual == -1) {
@@ -61,50 +61,48 @@ public class MetodoArbol {
             NodoTerminal aux2 = estado.terminales.inicio;
             buffer += c;
             while (aux2 != null) {
-                if (buffer.length() > 1) {
-                    if (aux2.terminal.equals(buffer)) {
+                if (conjuntos.VerificaConjunto(aux2.terminal) || conjuntos.VerificaConjunto(buffer)) {
+                    NodoConjunto conj = conjuntos.ObtenerConjunto(aux2.terminal);
+                    if (conjuntos.CumpleRegla(conj, c)) {
                         estadoActual = aux2.estado;
                         buffer = "";
                         break;
                     }
                 } else {
-                    if (conjuntos.VerificaConjunto(aux2.terminal)) {
-                        NodoConjunto conj = conjuntos.ObtenerConjunto(aux2.terminal);
-                        if (conjuntos.CumpleRegla(conj, c)) {
-                            estadoActual = aux2.estado;
-                            buffer = "";
-                            break;
-                        }
-                    } else {
 
-                        if (aux2.terminal.equals(String.valueOf(c))) {
-                            estadoActual = aux2.estado;
-                            buffer = "";
-                            break;
-                        }
-
+                    if (aux2.terminal.equals(String.valueOf(c))) {
+                        estadoActual = aux2.estado;
+                        buffer = "";
+                        break;
                     }
+
+                    if (aux2.terminal.equals(buffer)) {
+                        estadoActual = aux2.estado;
+                        buffer = "";
+                        break;
+                    }
+
                 }
 
                 aux2 = aux2.sig;
             }
         }
-        
-        if(buffer.length()>0){
-            return false; 
+
+        if (buffer.length() > 0) {
+            return false;
         }
 
         return this.transiciones.EstadoAceptacion(estadoActual);
     }
 
-    public String Salida(boolean valida) {
-        String valor = this.cadena;
+    public String Salida(boolean valida, String analizarCadena) {
+        String valor = analizarCadena;
         String exp = this.identificador;
         String cadena;
         if (valor.charAt(0) == '_') {
             valor = valor.substring(1);
         }
-        
+
         if (valida) {
             cadena = "La expresion \"" + valor + "\" es valida con la expresion regular " + exp;
         } else {
@@ -113,8 +111,8 @@ public class MetodoArbol {
         return cadena;
     }
 
-    public String GenerandoJSON(boolean valida) {
-        String valor = this.cadena;
+    public String GenerandoJSON(boolean valida, String analizarCadena) {
+        String valor = analizarCadena;
         String exp = this.identificador;
         String cadena;
         if (valor.charAt(0) == '_') {
@@ -140,7 +138,7 @@ public class MetodoArbol {
         this.transiciones.CargaSiguientes(this.siguientes, this.a.raiz);
         this.transiciones.ReporteTransiciones();
         this.transiciones.AFD_Graphviz();
-       
+
     }
 
 }

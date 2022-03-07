@@ -82,6 +82,7 @@ public class Grafo {
         final1.EsFinal=false;
         NodoG inicio2 = gFin.ObtenerInicial();
         inicio2.inicial=false;
+        int finalResultante=gFin.ObtenerFinal().id;
 
         //agregando los nodos de g2 a g1
         NodoG aux = gFin.inicio;
@@ -107,7 +108,8 @@ public class Grafo {
 
             aux = aux.sig;
         }
-        System.out.println("");
+        NodoG actualizaFinal= gInicio.BuscarNodo(finalResultante);
+        actualizaFinal.EsFinal=true;
         return gInicio;
 
     }
