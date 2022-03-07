@@ -134,7 +134,7 @@ public class ListaSiguientes {
         Document documento = new Document();
         FileOutputStream ficheroPdf;
         if (numero != -1) {
-            ficheroPdf = new FileOutputStream(directoryName + "/SIGUIENTES_202003919/Siguientes.pdf");
+            ficheroPdf = new FileOutputStream(directoryName + "/SIGUIENTES_202003919/Siguientes" + numero + ".pdf");
         } else {
             ficheroPdf = new FileOutputStream(directoryName + "/SIGUIENTES_202003919/Siguientes" + numero + ".pdf");
         }

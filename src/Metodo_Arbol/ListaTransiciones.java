@@ -187,7 +187,7 @@ public class ListaTransiciones {
         Document documento = new Document();
         FileOutputStream ficheroPdf;
         if (numero != -1) {
-            ficheroPdf = new FileOutputStream(directoryName + "/TRANSICIONES_202003919/Transiciones.pdf");
+            ficheroPdf = new FileOutputStream(directoryName + "/TRANSICIONES_202003919/Transiciones" + numero + ".pdf");
         } else {
             ficheroPdf = new FileOutputStream(directoryName + "/TRANSICIONES_202003919/Transiciones" + numero + ".pdf");
         }
