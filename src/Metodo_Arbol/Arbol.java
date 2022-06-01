@@ -138,7 +138,7 @@ public class Arbol {
 
             if (!(root.EsHoja())) {
                 if (root.tipo.equals("OR1")) {
-                    if (root.der.anulable && root.izq.anulable) {
+                    if (root.der.anulable || root.izq.anulable) {
                         root.anulable = true;
                     }
 
